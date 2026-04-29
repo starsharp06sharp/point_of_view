@@ -1,0 +1,58 @@
+{
+  "@@locale": "zh_TW",
+  "appTitle": "計算機",
+  "calcError": "錯誤",
+
+  "settingsTitle": "設定",
+  "sectionTheme": "主題",
+  "themeLight": "明亮",
+  "themeDark": "暗黑",
+  "themeSystem": "跟隨系統",
+
+  "sectionLanguage": "語言",
+  "languageSystem": "跟隨系統",
+
+  "sectionFileBrowser": "檔案瀏覽",
+  "showHiddenTitle": "顯示隱藏檔案 / 資料夾",
+  "showHiddenSubtitle": "以「.」開頭的項目，例如 .thumbnails",
+
+  "sectionUnlockSequence": "解鎖序列",
+  "currentSequence": "目前：{sequence}",
+  "draftPlaceholder": "請以下方鍵盤輸入",
+  "clearTooltip": "清除",
+  "saveSequence": "儲存解鎖序列",
+  "sequenceSaved": "解鎖序列已儲存",
+  "sequenceLengthError": "長度需在 {min}-{max} 位之間",
+  "sequenceCharsError": "只能包含 0-9 / + - × ÷ % = ± . AC",
+  "sequenceHelp": "可用字元：0-9 + - × ÷ % = ± . AC。在計算機主畫面按下相同的鍵序列即可靜默解鎖；採用視窗匹配，所以序列可以「藏」在更長的算式末尾。",
+
+  "permissionTitle": "需要儲存權限",
+  "permissionExplanation": "為瀏覽隱藏資料夾（包括以 . 開頭的目錄）下的圖片，本應用程式需要「所有檔案存取」權限。",
+  "permissionGrant": "授予權限",
+  "permissionOpenSettings": "開啟系統設定",
+  "permissionHint": "提示：在 Android 11+ 上系統會跳至「所有檔案存取」清單，請找到「計算機」並開啟，然後返回本應用程式。",
+
+  "folderPickerTitle": "選擇資料夾",
+  "folderPickerSubtitle": "{folders} 個資料夾 · {images} 張圖片 · {sortLabel}",
+  "sortTooltip": "排序方式",
+  "homeStorageTooltip": "回到主儲存空間",
+  "settingsTooltip": "設定",
+  "immersivePreview": "沉浸預覽",
+  "noAccessibleContent": "目前位置沒有可存取的內容。\n請確認「所有檔案存取」權限是否已授予。",
+  "emptyHere": "此處空空如也",
+  "parentFolderSubtitle": "返回上一層",
+
+  "gallerySubtitleNoZoom": "{images} 張圖片 · {sortLabel}",
+  "gallerySubtitleZoom": "{images} 張圖片 · {sortLabel} · {columns} 欄",
+  "noImages": "此資料夾中沒有可辨識的圖片。\n（支援 jpg/jpeg/png/gif/webp/bmp/heic/heif）",
+
+  "sortMenuNameAsc": "名稱 遞增 (A→Z)",
+  "sortMenuNameDesc": "名稱 遞減 (Z→A)",
+  "sortMenuModifiedDesc": "修改時間 遞減 (新→舊)",
+  "sortMenuModifiedAsc": "修改時間 遞增 (舊→新)",
+
+  "sortLabelNameAsc": "名稱 · 遞增",
+  "sortLabelNameDesc": "名稱 · 遞減",
+  "sortLabelModifiedAsc": "修改時間 · 遞增",
+  "sortLabelModifiedDesc": "修改時間 · 遞減"
+}

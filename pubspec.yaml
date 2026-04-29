@@ -1,7 +1,7 @@
 name: point_of_view
 description: "A new Flutter project."
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.1.0+2
 
 environment:
   sdk: ^3.11.5
@@ -9,6 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
   permission_handler: ^11.3.1
   photo_view: ^0.15.0
   shared_preferences: ^2.3.2
@@ -22,6 +25,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
 
 flutter_launcher_icons:
   android: true

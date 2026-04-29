@@ -1,0 +1,87 @@
+{
+  "@@locale": "en",
+  "appTitle": "Calculator",
+  "calcError": "Error",
+
+  "settingsTitle": "Settings",
+  "sectionTheme": "Theme",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeSystem": "Follow system",
+
+  "sectionLanguage": "Language",
+  "languageSystem": "Follow system",
+
+  "sectionFileBrowser": "File browser",
+  "showHiddenTitle": "Show hidden files / folders",
+  "showHiddenSubtitle": "Items starting with \".\", e.g. .thumbnails",
+
+  "sectionUnlockSequence": "Unlock sequence",
+  "currentSequence": "Current: {sequence}",
+  "@currentSequence": {
+    "placeholders": { "sequence": { "type": "String" } }
+  },
+  "draftPlaceholder": "Use the keypad below",
+  "clearTooltip": "Clear",
+  "saveSequence": "Save sequence",
+  "sequenceSaved": "Unlock sequence saved",
+  "sequenceLengthError": "Length must be between {min} and {max}",
+  "@sequenceLengthError": {
+    "placeholders": {
+      "min": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "sequenceCharsError": "Only 0-9 / + - × ÷ % = ± . AC are allowed",
+  "sequenceHelp": "Allowed characters: 0-9 + - × ÷ % = ± . AC. Press the same key sequence on the calculator to unlock silently; matching is windowed, so the sequence can be hidden at the end of a longer expression.",
+
+  "permissionTitle": "Storage permission required",
+  "permissionExplanation": "To browse images inside hidden folders (including directories starting with .), this app needs the \"All files access\" permission.",
+  "permissionGrant": "Grant permission",
+  "permissionOpenSettings": "Open system settings",
+  "permissionHint": "Tip: on Android 11+, the system opens the \"All files access\" list. Find \"Calculator\" and toggle it on, then return to this app.",
+
+  "folderPickerTitle": "Select folder",
+  "folderPickerSubtitle": "{folders} folders · {images} images · {sortLabel}",
+  "@folderPickerSubtitle": {
+    "placeholders": {
+      "folders": { "type": "int" },
+      "images": { "type": "int" },
+      "sortLabel": { "type": "String" }
+    }
+  },
+  "sortTooltip": "Sort by",
+  "homeStorageTooltip": "Go to primary storage",
+  "settingsTooltip": "Settings",
+  "immersivePreview": "Immersive preview",
+  "noAccessibleContent": "No accessible content here.\nPlease check that \"All files access\" permission is granted.",
+  "emptyHere": "Nothing here",
+  "parentFolderSubtitle": "Go up one level",
+
+  "gallerySubtitleNoZoom": "{images} images · {sortLabel}",
+  "@gallerySubtitleNoZoom": {
+    "placeholders": {
+      "images": { "type": "int" },
+      "sortLabel": { "type": "String" }
+    }
+  },
+  "gallerySubtitleZoom": "{images} images · {sortLabel} · {columns} columns",
+  "@gallerySubtitleZoom": {
+    "placeholders": {
+      "images": { "type": "int" },
+      "sortLabel": { "type": "String" },
+      "columns": { "type": "int" }
+    }
+  },
+  "noImages": "No recognizable images in this folder.\n(Supported: jpg/jpeg/png/gif/webp/bmp/heic/heif)",
+
+  "sortMenuNameAsc": "Name ascending (A→Z)",
+  "sortMenuNameDesc": "Name descending (Z→A)",
+  "sortMenuModifiedDesc": "Modified descending (new→old)",
+  "sortMenuModifiedAsc": "Modified ascending (old→new)",
+
+  "sortLabelNameAsc": "Name · Asc",
+  "sortLabelNameDesc": "Name · Desc",
+  "sortLabelModifiedAsc": "Modified · Asc",
+  "sortLabelModifiedDesc": "Modified · Desc"
+}

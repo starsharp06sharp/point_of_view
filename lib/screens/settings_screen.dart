@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/generated/app_localizations.dart';
+import '../l10n/labels.dart';
+import '../services/hidden_files_service.dart';
+import '../services/locale_service.dart';
 import '../services/secret_service.dart';
 import '../services/theme_service.dart';
 
@@ -54,14 +58,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _save() async {
+    final l = AppLocalizations.of(context);
     if (_draft.length < SecretService.minLength ||
         _draft.length > SecretService.maxLength) {
-      setState(() => _error =
-          '长度需在 ${SecretService.minLength}-${SecretService.maxLength} 位之间');
+      setState(() => _error = l.sequenceLengthError(
+          SecretService.minLength, SecretService.maxLength));
       return;
     }
     if (!SecretService.isValid(_draft)) {
-      setState(() => _error = '只能包含 0-9 / + - × ÷ % = ± . AC');
+      setState(() => _error = l.sequenceCharsError);
       return;
     }
     await SecretService.write(_draft);
@@ -71,20 +76,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _error = null;
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('解锁序列已保存')),
+      SnackBar(content: Text(l.sequenceSaved)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('设置')),
+      appBar: AppBar(title: Text(l.settingsTitle)),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
-                const _SectionHeader(label: '主题'),
+                _SectionHeader(label: l.sectionTheme),
                 ValueListenableBuilder<ThemeMode>(
                   valueListenable: ThemeService.mode,
                   builder: (_, mode, _) {
@@ -97,7 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: ThemeMode.values.map((m) {
                           return RadioListTile<ThemeMode>(
                             value: m,
-                            title: Text(ThemeService.label(m)),
+                            title: Text(themeModeLabel(context, m)),
                             secondary: Icon(_iconFor(m)),
                           );
                         }).toList(),
@@ -106,14 +112,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 const Divider(height: 24),
-                const _SectionHeader(label: '解锁序列'),
+                _SectionHeader(label: l.sectionLanguage),
+                ValueListenableBuilder<Locale?>(
+                  valueListenable: LocaleService.locale,
+                  builder: (_, current, _) {
+                    return RadioGroup<String>(
+                      groupValue: _localeKey(current),
+                      onChanged: (key) {
+                        if (key == null) return;
+                        LocaleService.setLocale(_localeFromKey(key));
+                      },
+                      child: Column(
+                        children: [
+                          RadioListTile<String>(
+                            value: _kSystem,
+                            title: Text(l.languageSystem),
+                            secondary:
+                                const Icon(Icons.brightness_auto_outlined),
+                          ),
+                          for (final entry in _languageOptions)
+                            RadioListTile<String>(
+                              value: entry.key,
+                              title: Text(entry.label),
+                              secondary: const Icon(Icons.language),
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 24),
+                _SectionHeader(label: l.sectionFileBrowser),
+                ValueListenableBuilder<bool>(
+                  valueListenable: HiddenFilesService.show,
+                  builder: (_, show, _) {
+                    return SwitchListTile(
+                      value: show,
+                      onChanged: (v) => HiddenFilesService.setShow(v),
+                      title: Text(l.showHiddenTitle),
+                      subtitle: Text(l.showHiddenSubtitle),
+                      secondary: Icon(
+                        show ? Icons.visibility : Icons.visibility_off,
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 24),
+                _SectionHeader(label: l.sectionUnlockSequence),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        '当前：${SecretService.display(_current)}',
+                        l.currentSequence(SecretService.display(_current)),
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       const SizedBox(height: 12),
@@ -127,13 +179,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(height: 16),
                       FilledButton(
                         onPressed: _save,
-                        child: const Text('保存解锁序列'),
+                        child: Text(l.saveSequence),
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        '可用字符：0-9 + - × ÷ % = ± . AC。在计算器主界面按下'
-                        '同样的键序列即可静默解锁；窗口式匹配，所以序列可以'
-                        '"藏"在更长的算式末尾。',
+                        l.sequenceHelp,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -149,6 +199,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ThemeMode.dark => Icons.dark_mode_outlined,
         ThemeMode.system => Icons.brightness_auto_outlined,
       };
+}
+
+const String _kSystem = 'system';
+
+class _LangOption {
+  final String key;
+  final String label;
+  final Locale locale;
+  const _LangOption(this.key, this.label, this.locale);
+}
+
+/// Native-language labels so each entry is recognizable regardless of the
+/// app's currently active locale.
+const List<_LangOption> _languageOptions = [
+  _LangOption('en', 'English', Locale('en')),
+  _LangOption('zh', '简体中文', Locale('zh')),
+  _LangOption('zh_HK', '繁體中文（香港）', Locale('zh', 'HK')),
+  _LangOption('zh_TW', '繁體中文（臺灣）', Locale('zh', 'TW')),
+];
+
+String _localeKey(Locale? locale) {
+  if (locale == null) return _kSystem;
+  return locale.countryCode == null
+      ? locale.languageCode
+      : '${locale.languageCode}_${locale.countryCode}';
+}
+
+Locale? _localeFromKey(String key) {
+  if (key == _kSystem) return null;
+  for (final opt in _languageOptions) {
+    if (opt.key == key) return opt.locale;
+  }
+  return null;
 }
 
 class _SectionHeader extends StatelessWidget {
@@ -181,8 +264,10 @@ class _DraftDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l = AppLocalizations.of(context);
     final isError = error != null;
-    final shown = value.isEmpty ? '请通过下方键盘输入' : SecretService.display(value);
+    final shown =
+        value.isEmpty ? l.draftPlaceholder : SecretService.display(value);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
@@ -210,7 +295,7 @@ class _DraftDisplay extends StatelessWidget {
               ),
               if (onClear != null)
                 IconButton(
-                  tooltip: '清空',
+                  tooltip: l.clearTooltip,
                   icon: const Icon(Icons.cancel),
                   onPressed: onClear,
                 ),

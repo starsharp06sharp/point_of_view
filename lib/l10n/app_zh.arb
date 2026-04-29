@@ -1,0 +1,58 @@
+{
+  "@@locale": "zh",
+  "appTitle": "计算器",
+  "calcError": "错误",
+
+  "settingsTitle": "设置",
+  "sectionTheme": "主题",
+  "themeLight": "明亮",
+  "themeDark": "暗黑",
+  "themeSystem": "跟随系统",
+
+  "sectionLanguage": "语言",
+  "languageSystem": "跟随系统",
+
+  "sectionFileBrowser": "文件浏览",
+  "showHiddenTitle": "显示隐藏文件 / 文件夹",
+  "showHiddenSubtitle": "以\".\"开头的项目，例如 .thumbnails",
+
+  "sectionUnlockSequence": "解锁序列",
+  "currentSequence": "当前：{sequence}",
+  "draftPlaceholder": "请通过下方键盘输入",
+  "clearTooltip": "清空",
+  "saveSequence": "保存解锁序列",
+  "sequenceSaved": "解锁序列已保存",
+  "sequenceLengthError": "长度需在 {min}-{max} 位之间",
+  "sequenceCharsError": "只能包含 0-9 / + - × ÷ % = ± . AC",
+  "sequenceHelp": "可用字符：0-9 + - × ÷ % = ± . AC。在计算器主界面按下同样的键序列即可静默解锁；窗口式匹配，所以序列可以\"藏\"在更长的算式末尾。",
+
+  "permissionTitle": "需要存储权限",
+  "permissionExplanation": "为了浏览隐藏文件夹（包括以 . 开头的目录）下的图片，本应用需要\"所有文件访问\"权限。",
+  "permissionGrant": "授予权限",
+  "permissionOpenSettings": "打开系统设置",
+  "permissionHint": "提示：在 Android 11+ 上系统会跳到\"所有文件访问\"列表，请找到\"计算器\"并打开开关，然后返回本应用。",
+
+  "folderPickerTitle": "选择文件夹",
+  "folderPickerSubtitle": "{folders} 个文件夹 · {images} 张图片 · {sortLabel}",
+  "sortTooltip": "排序方式",
+  "homeStorageTooltip": "回到主存储",
+  "settingsTooltip": "设置",
+  "immersivePreview": "沉浸预览",
+  "noAccessibleContent": "当前位置没有可访问的内容。\n请检查\"所有文件访问\"权限是否已授予。",
+  "emptyHere": "此处空空如也",
+  "parentFolderSubtitle": "返回上一级",
+
+  "gallerySubtitleNoZoom": "{images} 张图片 · {sortLabel}",
+  "gallerySubtitleZoom": "{images} 张图片 · {sortLabel} · {columns} 列",
+  "noImages": "此文件夹中没有可识别的图片。\n（支持 jpg/jpeg/png/gif/webp/bmp/heic/heif）",
+
+  "sortMenuNameAsc": "名称 升序 (A→Z)",
+  "sortMenuNameDesc": "名称 降序 (Z→A)",
+  "sortMenuModifiedDesc": "修改时间 降序 (新→旧)",
+  "sortMenuModifiedAsc": "修改时间 升序 (旧→新)",
+
+  "sortLabelNameAsc": "名称 · 升序",
+  "sortLabelNameDesc": "名称 · 降序",
+  "sortLabelModifiedAsc": "修改时间 · 升序",
+  "sortLabelModifiedDesc": "修改时间 · 降序"
+}

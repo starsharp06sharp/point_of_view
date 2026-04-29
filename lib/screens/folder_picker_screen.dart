@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 
+import '../l10n/generated/app_localizations.dart';
+import '../l10n/labels.dart';
 import '../models/sort_option.dart';
 import '../services/file_service.dart';
+import '../services/hidden_files_service.dart';
 import '../services/prefs_service.dart';
 import '../widgets/folder_tile.dart';
 import 'gallery_screen.dart';
@@ -25,10 +28,27 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
   SortOption _sort = SortOption.defaultOption;
   bool _loading = true;
 
+  /// Browser-style navigation history. Each [_enter] pushes the old path here;
+  /// pressing the system back button pops the most recent one instead of
+  /// leaving the screen.
+  final List<String> _history = [];
+
   @override
   void initState() {
     super.initState();
+    HiddenFilesService.show.addListener(_onHiddenChanged);
     _bootstrap();
+  }
+
+  @override
+  void dispose() {
+    HiddenFilesService.show.removeListener(_onHiddenChanged);
+    super.dispose();
+  }
+
+  void _onHiddenChanged() {
+    if (!mounted) return;
+    _load();
   }
 
   Future<void> _bootstrap() async {
@@ -42,8 +62,17 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
 
   Future<void> _load() async {
     setState(() => _loading = true);
-    final dirs = FileService.listSubdirectories(_currentPath, option: _sort);
-    final imgs = FileService.listImages(_currentPath, _sort);
+    final includeHidden = HiddenFilesService.show.value;
+    final dirs = FileService.listSubdirectories(
+      _currentPath,
+      option: _sort,
+      includeHidden: includeHidden,
+    );
+    final imgs = FileService.listImages(
+      _currentPath,
+      _sort,
+      includeHidden: includeHidden,
+    );
     if (!mounted) return;
     setState(() {
       _subdirs = dirs;
@@ -54,6 +83,8 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
   }
 
   void _enter(String path) {
+    if (path == _currentPath) return;
+    _history.add(_currentPath);
     setState(() => _currentPath = path);
     _load();
   }
@@ -63,6 +94,16 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
     final parent = p.dirname(_currentPath);
     if (parent == _currentPath) return;
     _enter(parent);
+  }
+
+  /// Called when the user presses the system back button or performs the back
+  /// gesture. Returns to the previously visited directory if any.
+  void _onPopInvoked(bool didPop, Object? _) {
+    if (didPop) return;
+    if (_history.isEmpty) return;
+    final prev = _history.removeLast();
+    setState(() => _currentPath = prev);
+    _load();
   }
 
   Future<void> _changeSort(SortOption option) async {
@@ -123,15 +164,28 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
   Widget build(BuildContext context) {
     final atRoot = FileService.isAtFilesystemRoot(_currentPath);
     final canSelect = !atRoot && _images.isNotEmpty;
+    final l = AppLocalizations.of(context);
 
-    return Scaffold(
+    return PopScope(
+      canPop: _history.isEmpty,
+      onPopInvokedWithResult: _onPopInvoked,
+      child: Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const BackButtonIcon(),
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('选择文件夹', style: TextStyle(fontSize: 16)),
+            Text(l.folderPickerTitle, style: const TextStyle(fontSize: 16)),
             Text(
-              '${_subdirs.length} 个文件夹 · ${_images.length} 张图片 · ${_sort.label}',
+              l.folderPickerSubtitle(
+                _subdirs.length,
+                _images.length,
+                _sort.shortLabel(context),
+              ),
               style: Theme.of(context).textTheme.bodySmall,
               overflow: TextOverflow.ellipsis,
             ),
@@ -139,37 +193,37 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
         ),
         actions: [
           PopupMenuButton<SortOption>(
-            tooltip: '排序方式',
+            tooltip: l.sortTooltip,
             icon: const Icon(Icons.sort),
             initialValue: _sort,
             onSelected: _changeSort,
-            itemBuilder: (_) => const [
+            itemBuilder: (_) => [
               PopupMenuItem(
-                value: SortOption(SortField.name, SortOrder.asc),
-                child: Text('名称 升序 (A→Z)'),
+                value: const SortOption(SortField.name, SortOrder.asc),
+                child: Text(l.sortMenuNameAsc),
               ),
               PopupMenuItem(
-                value: SortOption(SortField.name, SortOrder.desc),
-                child: Text('名称 降序 (Z→A)'),
+                value: const SortOption(SortField.name, SortOrder.desc),
+                child: Text(l.sortMenuNameDesc),
               ),
-              PopupMenuDivider(),
+              const PopupMenuDivider(),
               PopupMenuItem(
-                value: SortOption(SortField.modified, SortOrder.desc),
-                child: Text('修改时间 降序 (新→旧)'),
+                value: const SortOption(SortField.modified, SortOrder.desc),
+                child: Text(l.sortMenuModifiedDesc),
               ),
               PopupMenuItem(
-                value: SortOption(SortField.modified, SortOrder.asc),
-                child: Text('修改时间 升序 (旧→新)'),
+                value: const SortOption(SortField.modified, SortOrder.asc),
+                child: Text(l.sortMenuModifiedAsc),
               ),
             ],
           ),
           IconButton(
-            tooltip: '回到主存储',
+            tooltip: l.homeStorageTooltip,
             icon: const Icon(Icons.home_outlined),
             onPressed: () => _enter(FileService.primaryStorageRoot),
           ),
           IconButton(
-            tooltip: '设置',
+            tooltip: l.settingsTooltip,
             icon: const Icon(Icons.settings_outlined),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -197,9 +251,10 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
           ? FloatingActionButton.extended(
               onPressed: _selectThisFolder,
               icon: const Icon(Icons.collections_outlined),
-              label: const Text('沉浸预览'),
+              label: Text(l.immersivePreview),
             )
           : null,
+      ),
     );
   }
 
@@ -210,6 +265,7 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
     final emptyHintCount = !hasContent ? 1 : 0;
     final totalCount =
         parentCount + _subdirs.length + _images.length + emptyHintCount;
+    final l = AppLocalizations.of(context);
 
     return ListView.separated(
       padding: const EdgeInsets.only(bottom: 96),
@@ -217,7 +273,10 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
       separatorBuilder: (_, _) => const Divider(height: 1),
       itemBuilder: (context, index) {
         if (showParent && index == 0) {
-          return FolderTile.parent(onTap: _goUp);
+          return FolderTile.parent(
+            subtitle: l.parentFolderSubtitle,
+            onTap: _goUp,
+          );
         }
         final i = index - parentCount;
         if (i < _subdirs.length) {
@@ -252,9 +311,7 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
               const Icon(Icons.folder_off, size: 48),
               const SizedBox(height: 12),
               Text(
-                atRoot
-                    ? '当前位置没有可访问的内容。\n请检查"所有文件访问"权限是否已授予。'
-                    : '此处空空如也',
+                atRoot ? l.noAccessibleContent : l.emptyHere,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),

@@ -11,12 +11,6 @@ class SortOption {
   static const SortOption defaultOption =
       SortOption(SortField.name, SortOrder.asc);
 
-  String get label {
-    final f = field == SortField.name ? '名称' : '修改时间';
-    final o = order == SortOrder.asc ? '升序' : '降序';
-    return '$f · $o';
-  }
-
   String encode() => '${field.name}:${order.name}';
 
   static SortOption decode(String? raw) {

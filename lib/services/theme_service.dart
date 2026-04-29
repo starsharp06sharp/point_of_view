@@ -32,10 +32,4 @@ class ThemeService {
         'dark' => ThemeMode.dark,
         _ => ThemeMode.system,
       };
-
-  static String label(ThemeMode m) => switch (m) {
-        ThemeMode.light => '明亮',
-        ThemeMode.dark => '暗黑',
-        ThemeMode.system => '跟随系统',
-      };
 }

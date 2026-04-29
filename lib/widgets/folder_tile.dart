@@ -20,10 +20,10 @@ class FolderTile extends StatelessWidget {
     this.onTap,
   });
 
-  factory FolderTile.parent({VoidCallback? onTap}) {
+  factory FolderTile.parent({String? subtitle, VoidCallback? onTap}) {
     return FolderTile(
       name: '..',
-      subtitle: '返回上一级',
+      subtitle: subtitle,
       icon: Icons.arrow_upward,
       onTap: onTap,
     );

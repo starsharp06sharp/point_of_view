@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/generated/app_localizations.dart';
 import '../services/permission_service.dart';
 
 /// Renders [child] only when the app has been granted "all files access".
@@ -62,8 +63,9 @@ class _PermissionGateState extends State<PermissionGate>
       );
     }
     if (_granted) return widget.child;
+    final l = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('需要存储权限')),
+      appBar: AppBar(title: Text(l.permissionTitle)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Center(
@@ -73,8 +75,7 @@ class _PermissionGateState extends State<PermissionGate>
               const Icon(Icons.lock_open, size: 64),
               const SizedBox(height: 16),
               Text(
-                '为了浏览隐藏文件夹（包括以 . 开头的目录）下的图片，'
-                '本应用需要"所有文件访问"权限。',
+                l.permissionExplanation,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
@@ -82,7 +83,7 @@ class _PermissionGateState extends State<PermissionGate>
               FilledButton.icon(
                 onPressed: _request,
                 icon: const Icon(Icons.shield_outlined),
-                label: const Text('授予权限'),
+                label: Text(l.permissionGrant),
               ),
               const SizedBox(height: 8),
               TextButton.icon(
@@ -91,12 +92,11 @@ class _PermissionGateState extends State<PermissionGate>
                   await _check();
                 },
                 icon: const Icon(Icons.settings),
-                label: const Text('打开系统设置'),
+                label: Text(l.permissionOpenSettings),
               ),
               const SizedBox(height: 16),
               Text(
-                '提示：在 Android 11+ 上系统会跳到"所有文件访问"列表，'
-                '请找到"计算器"并打开开关，然后返回本应用。',
+                l.permissionHint,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
