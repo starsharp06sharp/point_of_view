@@ -18,13 +18,20 @@
 
 ## 截图
 
-TODO:计算器界面：
+计算器界面：
+<img width="558" height="1240" alt="a7a2657294493caf48d2d740cc181ca3" src="https://github.com/user-attachments/assets/04810efc-4b29-4fe8-a555-ae533fc1b05a" />
 
-TODO:文件列表：
+文件列表：
+<img width="558" height="1240" alt="1e8c21240ccc823d9a305ced3f0aabe8" src="https://github.com/user-attachments/assets/6d18473f-4973-426a-8047-9e852c09d12f" />
 
-TODO:沉浸预览：
 
-TODO:图片查看：
+沉浸预览：
+<img width="558" height="1240" alt="a4c022ded4c29e4fb48f85dacd4d51d0" src="https://github.com/user-attachments/assets/5baafd79-2a46-4570-9f00-4f1141711730" />
+
+
+图片查看：
+<img width="558" height="1240" alt="e05ca3ab203063a80c504c43053b4a02" src="https://github.com/user-attachments/assets/7beae435-4339-4e2e-944c-97e48cbf28f5" />
+
 
 
 ## 权限
