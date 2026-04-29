@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+
+import '../services/permission_service.dart';
+
+/// Renders [child] only when the app has been granted "all files access".
+/// Otherwise shows a prompt that lets the user jump to the system settings
+/// page; re-checks automatically when the app comes back to the foreground.
+class PermissionGate extends StatefulWidget {
+  final Widget child;
+
+  const PermissionGate({super.key, required this.child});
+
+  @override
+  State<PermissionGate> createState() => _PermissionGateState();
+}
+
+class _PermissionGateState extends State<PermissionGate>
+    with WidgetsBindingObserver {
+  bool _checking = true;
+  bool _granted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _check();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && !_granted) {
+      _check();
+    }
+  }
+
+  Future<void> _check() async {
+    setState(() => _checking = true);
+    final granted = await PermissionService.hasFullAccess();
+    if (!mounted) return;
+    setState(() {
+      _granted = granted;
+      _checking = false;
+    });
+  }
+
+  Future<void> _request() async {
+    await PermissionService.requestAllFilesAccess();
+    await _check();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_checking) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (_granted) return widget.child;
+    return Scaffold(
+      appBar: AppBar(title: const Text('需要存储权限')),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.lock_open, size: 64),
+              const SizedBox(height: 16),
+              Text(
+                '为了浏览隐藏文件夹（包括以 . 开头的目录）下的图片，'
+                '本应用需要"所有文件访问"权限。',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 24),
+              FilledButton.icon(
+                onPressed: _request,
+                icon: const Icon(Icons.shield_outlined),
+                label: const Text('授予权限'),
+              ),
+              const SizedBox(height: 8),
+              TextButton.icon(
+                onPressed: () async {
+                  await PermissionService.openSystemSettings();
+                  await _check();
+                },
+                icon: const Icon(Icons.settings),
+                label: const Text('打开系统设置'),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                '提示：在 Android 11+ 上系统会跳到"所有文件访问"列表，'
+                '请找到"计算器"并打开开关，然后返回本应用。',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
