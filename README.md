@@ -60,9 +60,32 @@ flutter pub get
 # 真机调试
 flutter run
 
-# 出 release APK
+# 出 release APK（默认 fat APK，~48MB）
 flutter build apk --release
 ```
+
+### 打更小的 release 包
+
+`flutter build apk --release` 默认把 3 套 ABI（armeabi-v7a / arm64-v8a / x86_64）的 Flutter Engine 全塞进同一个 APK，体积接近 50MB。仓库根目录提供一个 `Makefile` 把推荐的瘦身参数封装成一条命令：
+
+```bash
+make release   # 拆 ABI + Dart 混淆，每个 APK ~17MB，输出到 release-artifacts/<version>/
+make arm64     # 同上，但只保留 arm64-v8a 那个（侧载到现代安卓机就用这个）
+make install   # adb 安装上一步产出的 arm64 APK
+make clean     # flutter clean + 删除 release-artifacts/
+```
+
+实际等价于：
+
+```bash
+flutter build apk --release \
+  --split-per-abi \
+  --obfuscate --split-debug-info=build/symbols/<version>
+```
+
+> 混淆后的崩溃栈无法直接看；务必把 `build/symbols/<version>/` 备份归档，
+> 之后用 `flutter symbolize -i <stack.txt> -d build/symbols/<version>/app.android-arm64.symbols`
+> 还原。
 
 ## 项目结构
 
