@@ -33,6 +33,8 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
   /// leaving the screen.
   final List<String> _history = [];
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -43,6 +45,7 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
   @override
   void dispose() {
     HiddenFilesService.show.removeListener(_onHiddenChanged);
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -267,58 +270,63 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
         parentCount + _subdirs.length + _images.length + emptyHintCount;
     final l = AppLocalizations.of(context);
 
-    return ListView.separated(
-      padding: const EdgeInsets.only(bottom: 96),
-      itemCount: totalCount,
-      separatorBuilder: (_, _) => const Divider(height: 1),
-      itemBuilder: (context, index) {
-        if (showParent && index == 0) {
-          return FolderTile.parent(
-            subtitle: l.parentFolderSubtitle,
-            onTap: _goUp,
+    return Scrollbar(
+      controller: _scrollController,
+      interactive: true,
+      child: ListView.separated(
+        controller: _scrollController,
+        padding: const EdgeInsets.only(bottom: 96),
+        itemCount: totalCount,
+        separatorBuilder: (_, _) => const Divider(height: 1),
+        itemBuilder: (context, index) {
+          if (showParent && index == 0) {
+            return FolderTile.parent(
+              subtitle: l.parentFolderSubtitle,
+              onTap: _goUp,
+            );
+          }
+          final i = index - parentCount;
+          if (i < _subdirs.length) {
+            final dir = _subdirs[i];
+            final name = p.basename(dir.path);
+            final hidden = name.startsWith('.');
+            return FolderTile(
+              name: name,
+              subtitle: dir.path,
+              hidden: hidden,
+              onTap: () => _enter(dir.path),
+            );
+          }
+          final j = i - _subdirs.length;
+          if (j < _images.length) {
+            final file = _images[j];
+            final name = p.basename(file.path);
+            final hidden = name.startsWith('.');
+            return FolderTile.image(
+              file: file,
+              name: name,
+              subtitle: file.path,
+              hidden: hidden,
+              onTap: () => _openViewer(j),
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.folder_off, size: 48),
+                const SizedBox(height: 12),
+                Text(
+                  atRoot ? l.noAccessibleContent : l.emptyHere,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
           );
-        }
-        final i = index - parentCount;
-        if (i < _subdirs.length) {
-          final dir = _subdirs[i];
-          final name = p.basename(dir.path);
-          final hidden = name.startsWith('.');
-          return FolderTile(
-            name: name,
-            subtitle: dir.path,
-            hidden: hidden,
-            onTap: () => _enter(dir.path),
-          );
-        }
-        final j = i - _subdirs.length;
-        if (j < _images.length) {
-          final file = _images[j];
-          final name = p.basename(file.path);
-          final hidden = name.startsWith('.');
-          return FolderTile.image(
-            file: file,
-            name: name,
-            subtitle: file.path,
-            hidden: hidden,
-            onTap: () => _openViewer(j),
-          );
-        }
-        return Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.folder_off, size: 48),
-              const SizedBox(height: 12),
-              Text(
-                atRoot ? l.noAccessibleContent : l.emptyHere,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 }

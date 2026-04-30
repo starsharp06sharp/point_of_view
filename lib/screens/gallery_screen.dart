@@ -34,6 +34,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   List<_GalleryGroup>? _groupsCache;
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +46,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   void dispose() {
     HiddenFilesService.show.removeListener(_onHiddenChanged);
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -190,6 +193,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   Widget _buildFlatGrid(int columns) {
     return GridView.builder(
+      controller: _scrollController,
       padding: const EdgeInsets.all(2),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: columns,
@@ -230,7 +234,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
         ),
       );
     }
-    return CustomScrollView(slivers: slivers);
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: slivers,
+    );
   }
 
   int _defaultColumnsForWidth(double maxWidth) {
@@ -328,7 +335,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       behavior: HitTestBehavior.deferToChild,
                       onScaleStart: _handleScaleStart,
                       onScaleUpdate: _handleScaleUpdate,
-                      child: body,
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        interactive: true,
+                        child: body,
+                      ),
                     );
                   },
                 ),

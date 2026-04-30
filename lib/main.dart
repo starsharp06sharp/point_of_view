@@ -40,6 +40,7 @@ class CalculatorApp extends StatelessWidget {
                   seedColor: Colors.deepPurple,
                   brightness: Brightness.light,
                 ),
+                scrollbarTheme: _scrollbarTheme(),
               ),
               darkTheme: ThemeData(
                 useMaterial3: true,
@@ -48,6 +49,7 @@ class CalculatorApp extends StatelessWidget {
                   seedColor: Colors.deepPurple,
                   brightness: Brightness.dark,
                 ),
+                scrollbarTheme: _scrollbarTheme(),
               ),
               home: const CalculatorScreen(),
             );
@@ -56,4 +58,15 @@ class CalculatorApp extends StatelessWidget {
       },
     );
   }
+}
+
+ScrollbarThemeData _scrollbarTheme() {
+  return ScrollbarThemeData(
+    thickness: WidgetStateProperty.resolveWith<double>((states) {
+      if (states.contains(WidgetState.dragged)) return 14;
+      if (states.contains(WidgetState.hovered)) return 10;
+      return 6;
+    }),
+    radius: const Radius.circular(8),
+  );
 }
