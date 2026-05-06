@@ -159,6 +159,53 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sortLabelModifiedDesc => '修改时间 · 降序';
+
+  @override
+  String get imageInfoTooltip => '信息';
+
+  @override
+  String get imageInfoTitle => '图片信息';
+
+  @override
+  String get imageInfoCloseTooltip => '关闭';
+
+  @override
+  String get imageInfoLoading => '正在加载…';
+
+  @override
+  String get imageInfoUnknown => '—';
+
+  @override
+  String get imageInfoPath => '路径';
+
+  @override
+  String get imageInfoType => '类型';
+
+  @override
+  String get imageInfoResolution => '分辨率';
+
+  @override
+  String get imageInfoSize => '大小';
+
+  @override
+  String get imageInfoCreated => '创建时间';
+
+  @override
+  String get imageInfoModified => '修改时间';
+
+  @override
+  String get imageInfoLocation => '位置';
+
+  @override
+  String get imageInfoCamera => '相机';
+
+  @override
+  String get imageInfoCameraParams => '参数';
+
+  @override
+  String imageInfoResolutionValue(int width, int height) {
+    return '$width × $height';
+  }
 }
 
 /// The translations for Chinese, as used in Hong Kong (`zh_HK`).
@@ -316,6 +363,53 @@ class AppLocalizationsZhHk extends AppLocalizationsZh {
 
   @override
   String get sortLabelModifiedDesc => '修改時間 · 降冪';
+
+  @override
+  String get imageInfoTooltip => '資訊';
+
+  @override
+  String get imageInfoTitle => '圖片資訊';
+
+  @override
+  String get imageInfoCloseTooltip => '關閉';
+
+  @override
+  String get imageInfoLoading => '載入中…';
+
+  @override
+  String get imageInfoUnknown => '—';
+
+  @override
+  String get imageInfoPath => '路徑';
+
+  @override
+  String get imageInfoType => '類型';
+
+  @override
+  String get imageInfoResolution => '解析度';
+
+  @override
+  String get imageInfoSize => '大小';
+
+  @override
+  String get imageInfoCreated => '建立時間';
+
+  @override
+  String get imageInfoModified => '修改時間';
+
+  @override
+  String get imageInfoLocation => '位置';
+
+  @override
+  String get imageInfoCamera => '相機';
+
+  @override
+  String get imageInfoCameraParams => '參數';
+
+  @override
+  String imageInfoResolutionValue(int width, int height) {
+    return '$width × $height';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -473,4 +567,51 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sortLabelModifiedDesc => '修改時間 · 遞減';
+
+  @override
+  String get imageInfoTooltip => '資訊';
+
+  @override
+  String get imageInfoTitle => '圖片資訊';
+
+  @override
+  String get imageInfoCloseTooltip => '關閉';
+
+  @override
+  String get imageInfoLoading => '載入中…';
+
+  @override
+  String get imageInfoUnknown => '—';
+
+  @override
+  String get imageInfoPath => '路徑';
+
+  @override
+  String get imageInfoType => '類型';
+
+  @override
+  String get imageInfoResolution => '解析度';
+
+  @override
+  String get imageInfoSize => '大小';
+
+  @override
+  String get imageInfoCreated => '建立時間';
+
+  @override
+  String get imageInfoModified => '修改時間';
+
+  @override
+  String get imageInfoLocation => '位置';
+
+  @override
+  String get imageInfoCamera => '相機';
+
+  @override
+  String get imageInfoCameraParams => '參數';
+
+  @override
+  String imageInfoResolutionValue(int width, int height) {
+    return '$width × $height';
+  }
 }

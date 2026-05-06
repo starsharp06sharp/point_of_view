@@ -161,4 +161,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sortLabelModifiedDesc => 'Modified · Desc';
+
+  @override
+  String get imageInfoTooltip => 'Info';
+
+  @override
+  String get imageInfoTitle => 'Image info';
+
+  @override
+  String get imageInfoCloseTooltip => 'Close';
+
+  @override
+  String get imageInfoLoading => 'Loading…';
+
+  @override
+  String get imageInfoUnknown => '—';
+
+  @override
+  String get imageInfoPath => 'Path';
+
+  @override
+  String get imageInfoType => 'Type';
+
+  @override
+  String get imageInfoResolution => 'Resolution';
+
+  @override
+  String get imageInfoSize => 'Size';
+
+  @override
+  String get imageInfoCreated => 'Created';
+
+  @override
+  String get imageInfoModified => 'Modified';
+
+  @override
+  String get imageInfoLocation => 'Location';
+
+  @override
+  String get imageInfoCamera => 'Camera';
+
+  @override
+  String get imageInfoCameraParams => 'Parameters';
+
+  @override
+  String imageInfoResolutionValue(int width, int height) {
+    return '$width × $height';
+  }
 }

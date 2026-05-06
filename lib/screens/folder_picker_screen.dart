@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 
 import '../l10n/generated/app_localizations.dart';
@@ -23,8 +24,8 @@ class FolderPickerScreen extends StatefulWidget {
 
 class _FolderPickerScreenState extends State<FolderPickerScreen> {
   String _currentPath = FileService.primaryStorageRoot;
-  List<Directory> _subdirs = const [];
-  List<File> _images = const [];
+  List<DirEntry> _subdirs = const [];
+  List<ImageEntry> _images = const [];
   SortOption _sort = SortOption.defaultOption;
   bool _loading = true;
 
@@ -66,12 +67,12 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
   Future<void> _load() async {
     setState(() => _loading = true);
     final includeHidden = HiddenFilesService.show.value;
-    final dirs = FileService.listSubdirectories(
+    final dirs = FileService.listSubdirectoryEntries(
       _currentPath,
       option: _sort,
       includeHidden: includeHidden,
     );
-    final imgs = FileService.listImages(
+    final imgs = FileService.listImageEntries(
       _currentPath,
       _sort,
       includeHidden: includeHidden,
@@ -130,11 +131,30 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => ImageViewerScreen(
-          images: _images,
+          images: _images.map((e) => e.file).toList(growable: false),
           initialIndex: index,
         ),
       ),
     );
+  }
+
+  /// Format [modified] as a compact, locale-aware string for use as a list
+  /// subtitle. Returns `null` if the timestamp is the unix epoch (used as a
+  /// sentinel when `stat` failed), so callers can omit the subtitle.
+  String? _formatModified(DateTime modified) {
+    if (modified.millisecondsSinceEpoch == 0) return null;
+    final localeName = Localizations.localeOf(context).toString();
+    final now = DateTime.now();
+    final sameDay = now.year == modified.year &&
+        now.month == modified.month &&
+        now.day == modified.day;
+    if (sameDay) {
+      return DateFormat.jm(localeName).format(modified);
+    }
+    if (now.year == modified.year) {
+      return DateFormat.MMMd(localeName).add_jm().format(modified);
+    }
+    return DateFormat.yMMMd(localeName).add_jm().format(modified);
   }
 
   Widget _buildBreadcrumb() {
@@ -287,25 +307,27 @@ class _FolderPickerScreenState extends State<FolderPickerScreen> {
           }
           final i = index - parentCount;
           if (i < _subdirs.length) {
-            final dir = _subdirs[i];
+            final entry = _subdirs[i];
+            final dir = entry.dir;
             final name = p.basename(dir.path);
             final hidden = name.startsWith('.');
             return FolderTile(
               name: name,
-              subtitle: dir.path,
+              subtitle: _formatModified(entry.modified),
               hidden: hidden,
               onTap: () => _enter(dir.path),
             );
           }
           final j = i - _subdirs.length;
           if (j < _images.length) {
-            final file = _images[j];
+            final entry = _images[j];
+            final file = entry.file;
             final name = p.basename(file.path);
             final hidden = name.startsWith('.');
             return FolderTile.image(
               file: file,
               name: name,
-              subtitle: file.path,
+              subtitle: _formatModified(entry.modified),
               hidden: hidden,
               onTap: () => _openViewer(j),
             );

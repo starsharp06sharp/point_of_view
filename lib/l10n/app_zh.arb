@@ -54,5 +54,21 @@
   "sortLabelNameAsc": "名称 · 升序",
   "sortLabelNameDesc": "名称 · 降序",
   "sortLabelModifiedAsc": "修改时间 · 升序",
-  "sortLabelModifiedDesc": "修改时间 · 降序"
+  "sortLabelModifiedDesc": "修改时间 · 降序",
+
+  "imageInfoTooltip": "信息",
+  "imageInfoTitle": "图片信息",
+  "imageInfoCloseTooltip": "关闭",
+  "imageInfoLoading": "正在加载…",
+  "imageInfoUnknown": "—",
+  "imageInfoPath": "路径",
+  "imageInfoType": "类型",
+  "imageInfoResolution": "分辨率",
+  "imageInfoSize": "大小",
+  "imageInfoCreated": "创建时间",
+  "imageInfoModified": "修改时间",
+  "imageInfoLocation": "位置",
+  "imageInfoCamera": "相机",
+  "imageInfoCameraParams": "参数",
+  "imageInfoResolutionValue": "{width} × {height}"
 }

@@ -375,6 +375,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Modified · Desc'**
   String get sortLabelModifiedDesc;
+
+  /// No description provided for @imageInfoTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Info'**
+  String get imageInfoTooltip;
+
+  /// No description provided for @imageInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Image info'**
+  String get imageInfoTitle;
+
+  /// No description provided for @imageInfoCloseTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get imageInfoCloseTooltip;
+
+  /// No description provided for @imageInfoLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get imageInfoLoading;
+
+  /// No description provided for @imageInfoUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get imageInfoUnknown;
+
+  /// No description provided for @imageInfoPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Path'**
+  String get imageInfoPath;
+
+  /// No description provided for @imageInfoType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get imageInfoType;
+
+  /// No description provided for @imageInfoResolution.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolution'**
+  String get imageInfoResolution;
+
+  /// No description provided for @imageInfoSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get imageInfoSize;
+
+  /// No description provided for @imageInfoCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get imageInfoCreated;
+
+  /// No description provided for @imageInfoModified.
+  ///
+  /// In en, this message translates to:
+  /// **'Modified'**
+  String get imageInfoModified;
+
+  /// No description provided for @imageInfoLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get imageInfoLocation;
+
+  /// No description provided for @imageInfoCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get imageInfoCamera;
+
+  /// No description provided for @imageInfoCameraParams.
+  ///
+  /// In en, this message translates to:
+  /// **'Parameters'**
+  String get imageInfoCameraParams;
+
+  /// No description provided for @imageInfoResolutionValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{width} × {height}'**
+  String imageInfoResolutionValue(int width, int height);
 }
 
 class _AppLocalizationsDelegate

@@ -19,17 +19,18 @@ class FileService {
   static const String primaryStorageRoot = '/storage/emulated/0';
   static const String storageVolumesRoot = '/storage';
 
-  /// List immediate sub-directories of [path], sorted by [option]. When
-  /// [includeHidden] is false, dot-prefixed directories are filtered out.
-  /// Entries that fail to stat (permission denied) are skipped.
-  static List<Directory> listSubdirectories(
+  /// List immediate sub-directory entries of [path] with their cached
+  /// modification timestamp, sorted by [option]. When [includeHidden] is
+  /// false, dot-prefixed directories are filtered out. Entries that fail to
+  /// stat (permission denied) are skipped.
+  static List<DirEntry> listSubdirectoryEntries(
     String path, {
     SortOption option = SortOption.defaultOption,
     bool includeHidden = true,
   }) {
     final dir = Directory(path);
     if (!dir.existsSync()) return const [];
-    final List<_DirEntry> entries = [];
+    final List<DirEntry> entries = [];
     try {
       for (final entity in dir.listSync(followLinks: false)) {
         if (entity is! Directory) continue;
@@ -40,13 +41,13 @@ class FileService {
         } on FileSystemException {
           modified = DateTime.fromMillisecondsSinceEpoch(0);
         }
-        entries.add(_DirEntry(entity, modified));
+        entries.add(DirEntry(entity, modified));
       }
     } on FileSystemException {
       return const [];
     }
 
-    int cmp(_DirEntry a, _DirEntry b) {
+    int cmp(DirEntry a, DirEntry b) {
       switch (option.field) {
         case SortField.name:
           return p
@@ -60,9 +61,21 @@ class FileService {
 
     entries.sort(cmp);
     if (option.order == SortOrder.desc) {
-      return entries.reversed.map((e) => e.dir).toList(growable: false);
+      return entries.reversed.toList(growable: false);
     }
-    return entries.map((e) => e.dir).toList(growable: false);
+    return List.unmodifiable(entries);
+  }
+
+  /// Convenience wrapper: same as [listSubdirectoryEntries] but returns only
+  /// the [Directory] objects.
+  static List<Directory> listSubdirectories(
+    String path, {
+    SortOption option = SortOption.defaultOption,
+    bool includeHidden = true,
+  }) {
+    return listSubdirectoryEntries(path, option: option, includeHidden: includeHidden)
+        .map((e) => e.dir)
+        .toList(growable: false);
   }
 
   /// Whether the path represents the root that the user is allowed to back
@@ -141,8 +154,8 @@ class ImageEntry {
   const ImageEntry(this.file, this.modified);
 }
 
-class _DirEntry {
+class DirEntry {
   final Directory dir;
   final DateTime modified;
-  _DirEntry(this.dir, this.modified);
+  const DirEntry(this.dir, this.modified);
 }

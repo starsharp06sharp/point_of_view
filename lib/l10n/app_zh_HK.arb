@@ -54,5 +54,21 @@
   "sortLabelNameAsc": "名稱 · 升冪",
   "sortLabelNameDesc": "名稱 · 降冪",
   "sortLabelModifiedAsc": "修改時間 · 升冪",
-  "sortLabelModifiedDesc": "修改時間 · 降冪"
+  "sortLabelModifiedDesc": "修改時間 · 降冪",
+
+  "imageInfoTooltip": "資訊",
+  "imageInfoTitle": "圖片資訊",
+  "imageInfoCloseTooltip": "關閉",
+  "imageInfoLoading": "載入中…",
+  "imageInfoUnknown": "—",
+  "imageInfoPath": "路徑",
+  "imageInfoType": "類型",
+  "imageInfoResolution": "解析度",
+  "imageInfoSize": "大小",
+  "imageInfoCreated": "建立時間",
+  "imageInfoModified": "修改時間",
+  "imageInfoLocation": "位置",
+  "imageInfoCamera": "相機",
+  "imageInfoCameraParams": "參數",
+  "imageInfoResolutionValue": "{width} × {height}"
 }

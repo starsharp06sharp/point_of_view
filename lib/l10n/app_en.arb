@@ -83,5 +83,27 @@
   "sortLabelNameAsc": "Name · Asc",
   "sortLabelNameDesc": "Name · Desc",
   "sortLabelModifiedAsc": "Modified · Asc",
-  "sortLabelModifiedDesc": "Modified · Desc"
+  "sortLabelModifiedDesc": "Modified · Desc",
+
+  "imageInfoTooltip": "Info",
+  "imageInfoTitle": "Image info",
+  "imageInfoCloseTooltip": "Close",
+  "imageInfoLoading": "Loading…",
+  "imageInfoUnknown": "—",
+  "imageInfoPath": "Path",
+  "imageInfoType": "Type",
+  "imageInfoResolution": "Resolution",
+  "imageInfoSize": "Size",
+  "imageInfoCreated": "Created",
+  "imageInfoModified": "Modified",
+  "imageInfoLocation": "Location",
+  "imageInfoCamera": "Camera",
+  "imageInfoCameraParams": "Parameters",
+  "imageInfoResolutionValue": "{width} × {height}",
+  "@imageInfoResolutionValue": {
+    "placeholders": {
+      "width": { "type": "int" },
+      "height": { "type": "int" }
+    }
+  }
 }
